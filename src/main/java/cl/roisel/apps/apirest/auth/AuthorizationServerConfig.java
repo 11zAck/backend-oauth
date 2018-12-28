@@ -1,5 +1,7 @@
 package cl.roisel.apps.apirest.auth;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 @Configuration
@@ -18,7 +21,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter{
 
 	@Autowired private BCryptPasswordEncoder passwordEncoder;
-	
+	@Autowired private InfoExtraToken infoExtraToken;
 	@Autowired @Qualifier("authenticationManager") private AuthenticationManager authenticationManager;
 
 	@Override
@@ -43,9 +46,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+		
+		TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+		tokenEnhancerChain.setTokenEnhancers(Arrays.asList(infoExtraToken,accessTokenConverter()));
+		
 		endpoints
 			.authenticationManager(authenticationManager)
-			.accessTokenConverter(accessTokenConverter());
+			.accessTokenConverter(accessTokenConverter())
+			.tokenEnhancer(tokenEnhancerChain);
+		
 	}
 
 	@Bean
