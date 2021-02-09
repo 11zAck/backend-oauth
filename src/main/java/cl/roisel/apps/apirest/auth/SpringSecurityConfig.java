@@ -14,9 +14,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	private final UserDetailsService userDetailsService;
+
 	@Autowired
-	private UserDetailsService usuarioService;
-	
+	public SpringSecurityConfig(UserDetailsService userDetailsService){
+		this.userDetailsService = userDetailsService;
+	}
+
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -25,7 +29,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	@Autowired
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(this.usuarioService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
 	@Bean
@@ -33,7 +37,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManager();
 	}
-	
+
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
@@ -42,6 +46,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 			.csrf().disable()
 			.sessionManagement().sessionCreationPolicy( SessionCreationPolicy.STATELESS );
 	}
-	
-	
+
+
 }

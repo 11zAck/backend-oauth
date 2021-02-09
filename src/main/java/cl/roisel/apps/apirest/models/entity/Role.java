@@ -20,7 +20,7 @@ public class Role implements Serializable {
 	private Long id;
 
 	@Column(unique = true, length = 20)
-	private String nombre;
+	private String name;
 
 // ***** SOLO SI SE NECESITA RELACION BI-DIRECCIONAL
 //	@ManyToMany(mappedBy="roles")
@@ -36,12 +36,12 @@ public class Role implements Serializable {
 		this.id = id;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public String getName() {
+		return name;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	private static final long serialVersionUID = 1L;

@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter{
 
 	@Autowired private BCryptPasswordEncoder passwordEncoder;
-	
+
 	@Autowired @Qualifier("authenticationManager") private AuthenticationManager authenticationManager;
 
 	@Override
@@ -53,7 +53,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		JwtAccessTokenConverter jwt = new JwtAccessTokenConverter();
 		return jwt;
 	}
-	
-	
-	
+
+
+
 }
